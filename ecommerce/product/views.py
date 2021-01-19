@@ -131,7 +131,7 @@ def profile(request):
             items={}
             items['name']=item.product.name
             items['quantity']=item.quantity
-            items['price']=item.product.price
+            items['price']=item.product.price*item.quantity
             total=total+(item.quantity*item.product.price)
             listOfItems.append(items)
         odr["orderItems"]=listOfItems
