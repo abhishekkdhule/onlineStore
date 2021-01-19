@@ -1,0 +1,146 @@
+{% include 'product/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container border border-dark mt-3" style="text-align:left">
+    <h2 class="mt-3 mb-3">My Profile</h2>
+    {% for message in messages%}
+    <div class="alert alert-danger" role="alert">
+       {{message}}
+      </div>
+    {% endfor %}
+    <div class="row p-1 pt-2 mt-2 m-1" style="background-color: rgb(238, 238, 238);">
+        <div class="col-md-4">
+            <h5>Name</h5 >
+        </div>
+        <div class="col-md-8">
+            <p>{{profile.name}}</p>
+        </div>
+    </div>
+    <div class="row mt-2 p-1 pt-2 m-1" style="background-color:rgb(238, 238, 238);">
+        <div class="col-md-4">
+            <h5>Email</h5>
+        </div>
+        <div class="col-md-8">
+            <p>{{profile.email}}</p>
+        </div>
+    </div>
+    <div class="row mt-2 p-1 pt-2 m-1" style="background-color:rgb(238, 238, 238)">
+        <div class="col-md-4">
+            <h5>Contact No.</h5>
+        </div>
+        <div class="col-md-8">
+            <p>{{profile.contact}}</p>
+        </div>
+    </div>
+    <div class="row mt-2 p-1 pt-2 mb-2 m-1" style="background-color: rgb(238, 238, 238)">
+        <div class="col-md-4">
+            <h5>Address</h5>
+        </div>
+        <div class="col-md-8">
+            <p>{{profile.address}}</p>
+        </div>
+    </div>
+    <div class="row mt-2 p-1 pt-2 mb-2" >
+        <div class="col-md-4">
+        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#updateProfile">Update</button>
+        </div>
+        <div class="col-md-8">
+        </div>
+    </div>
+</div>
+    
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="updateProfile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update Profile</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="POST" action="{% url 'updateProfile' %}">{% csrf_token %}
+        <div class="modal-body">
+                <div class="mb-3">
+                    <label for="nameUpdate" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="nameUpdate" name="nameUpdate">
+                </div>
+                <div class="mb-3">
+                    <label for="emailUpdate" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="emailUpdate" name="emailUpdate">
+                </div>
+                <div class="mb-3">
+                    <label for="contactUpdate" class="form-label">Cantact number</label>
+                    <input type="number" class="form-control" id="contactUpdate" name="contactUpdate">
+                </div>
+                <div class="mb-3">
+                    <label for="addressUpdate" class="form-label">Address</label>
+                    <textarea class="form-control" aria-label="With textarea" name="addressUpdate"></textarea>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-dark">Save changes</button>
+            </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+<!-- ORDERS  -->
+<div class="container border border-dark mt-4 mb-4">
+    <h2 class="mt-3 mb-3">My Orders</h2>
+{% for order in orders%}
+<div class="container  mt-3 p-2 mb-3" style="background-color: rgb(238, 238, 238)">
+    <div class="row ">
+        <div class="col-4">
+            <h5>Order date</h5>
+            <p>{{order.date}}</p>
+        </div>
+        <div class="col-4">
+            <h5 style="text-align: center;">Total</h5>
+            <p style="text-align: center;">&#8377;{{order.total}}</p>
+        </div>
+        <div class="col-4">
+            <button class="btn btn-dark"style="position:relative;right:2px;" type="button" data-bs-toggle="collapse" data-bs-target="#{{order.id}}" aria-expanded="false" aria-controls="collapseExample">
+                Order Details
+              </button>
+        </div>
+    </div>
+    
+    <div class="collapse pt-2" id="{{order.id}}">
+        <div class="card card-body">
+            <div class="row">
+                <div class="col-4">
+                    <p><b>Product</b></p>
+                </div>
+                <div class="col-4">
+                    <p><b>Quantity</b></p>
+                </div>
+                <div class="col-4">
+                    <p><b>Price</b></p>
+                </div>
+            </div>
+            {% for item in order.orderItems %}
+          <div class="row">
+              <div class="col-4">
+                <p>{{item.name}}</p>
+              </div>
+              <div class="col-4">
+                <p>{{item.quantity}}</p>
+              </div>
+              <div class="col-4">
+                <p>&#8377;{{item.price}}</p>
+              </div>
+          </div>
+          {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+  <link rel="shortcut icon" href="#"> 
+  <link rel="stylesheet" href="{% static 'product/base.css'%}">
+  <title>Doodhwala</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'db_icon.png' %}" style="height:50px; margin:0;"><b> Doodhwala</b></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+             <a class="nav-link">Hello {{user.username}}!</a>
+            </li>  
+             <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'cart' %}">Cart</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'profile' %}">My Profile</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'signin' %}"> Login</a>
+            </li>  
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'signup' %}"> New customer</a>
+            </li>   
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+      </nav>
+     
+    {% block content %}
+
+    {% endblock %}
+    <script>
+
+      //function to handle quantity of individual item
+      function handleClick(event){
+        console.log(event.target)
+      const product=event.target.attributes[1].value;
+          const action=event.target.attributes[2].value;
+          const xhr=new XMLHttpRequest();
+          let url;
+          if(action==="add"){
+            url='../addItem';
+          }
+          else{
+            url="../deleteItem"
+          }
+          xhr.open("POST", url, true); 
+
+          // Set the request header i.e. which type of content you are sending 
+          xhr.setRequestHeader("Content-Type", "application/json"); 
+          xhr.setRequestHeader("X-CSRFToken", csrftoken); 
+          // Create a state change callback 
+          xhr.onreadystatechange = function () { 
+              if (xhr.readyState === 4 && xhr.status === 200) { 
+                  // Print received data from server 
+                  console.log(this.responseText);
+              } 
+          }; 
+          let data=JSON.stringify({"product":product,"action":action});
+          xhr.send(data);
+      }
+
+      //funtion to handle add to cart funtionality
+      function handleCart(event){
+          const product=event.target.attributes[1].value;
+          quantity=document.getElementById(product)
+          const action=event.target.attributes[2].value;
+          const xhr=new XMLHttpRequest();
+          let url;
+          if(action==="add"){
+            url='../addItem';
+            console.log(parseInt(document.getElementById(product).innerHTML)+1)
+            // document.getElementById(product).innerHTML=quantity+1;
+          }
+          else{
+            url="../deleteItem"
+            
+          }
+          xhr.open("POST", url, true); 
+
+          // Set the request header i.e. which type of content you are sending 
+          xhr.setRequestHeader("Content-Type", "application/json"); 
+          xhr.setRequestHeader("X-CSRFToken", csrftoken); 
+          // Create a state change callback 
+          xhr.onreadystatechange = function () { 
+              if (xhr.readyState === 4 && xhr.status === 200) { 
+                  // Print received data from server
+                    if(JSON.parse(this.responseText)['quantity']==0){
+                      location.reload(true);
+                    }
+                    else{
+                      document.getElementById(product).innerHTML=JSON.parse(this.responseText)['quantity'];
+                      document.getElementById("price-"+product).innerHTML="<p>&#8377;"+JSON.parse(this.responseText)['price']*JSON.parse(this.responseText)['quantity']+".0</p>";
+                    }
+                    if(action==="add"){
+                      let price=parseInt(document.getElementById("totalAmount").innerText.substring(1));
+                      price=price+parseInt(JSON.parse(this.responseText)['price']);
+                      document.getElementById("totalAmount").innerHTML="<h3>&#8377;"+price+"</h3>";
+                    }
+                    else{
+                      let total=parseInt(document.getElementById("totalAmount").innerText.substring(1));
+                      total=total-parseInt(JSON.parse(this.responseText)['price']);
+                      // console.log(total+" "+price);
+                      document.getElementById("totalAmount").innerHTML="<h3>&#8377;"+total+".0</h3>";
+                    }
+              }   
+          }; 
+          let data=JSON.stringify({"product":product,"action":action});
+          xhr.send(data);
+    
+      }
+    
+     
+      //django  csrf
+      function getCookie(name) {
+          let cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              const cookies = document.cookie.split(';');
+              for (let i = 0; i < cookies.length; i++) {
+                  const cookie = cookies[i].trim();
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+      const csrftoken = getCookie('csrftoken');
+  </script>
+</body>
+</html>

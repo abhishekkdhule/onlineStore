@@ -1,0 +1,35 @@
+{% include 'product/base.html' %}
+{% load  static%}
+      {% block content %}
+      <div class="container-xl">
+          <div class="row ">
+            {% for product in products %}
+            <div class="col-md-4 mt-4 p-2 " id="eachProduct">
+                <div class="p-3" style="background-color: rgb(238, 238, 238);">
+                <h3>{{product.name}}</h3>
+                <div class="mt-2">
+                    <img src="{{product.image}}" style="width:100%;height:250px;"  alt="">
+                </div>
+                <h5 class="mt-2">&#8377;{{product.price}} per {{product.unit}}</h5>
+                <button onclick="handleClick(event)" data-product-id="{{product.name}}" data-cart-action="add" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-dark mt-2 pb-2" style="width:98%;height:35px;">Add to cart</button>
+                </div>
+            </div>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Product addded to cart successfully!!!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+      </div>
+        
+      {% endblock %}
+

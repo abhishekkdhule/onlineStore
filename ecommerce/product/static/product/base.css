@@ -1,0 +1,15 @@
+
+#eachProduct{
+    transition-duration: 1s;
+}
+#eachProduct:hover{
+    box-shadow:1px 1px 15px 5px rgb(218, 218, 218);
+}
+@media(max-width:900px){
+    #navCartProfile{
+        background-color: red;
+        flex-direction: column;
+        width: 100%;
+        position:none;
+    }
+}

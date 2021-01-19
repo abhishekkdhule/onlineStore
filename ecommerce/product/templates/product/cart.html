@@ -1,0 +1,79 @@
+{% include 'product/base.html' %}
+{% load  static%}
+      {% block content %}
+      <div class="container-lg" id="cont" style="text-align: center;">
+        <div id="alertBox" class="alert alert-success d-none mt-2" role="alert">alert</div>
+            <div  style="background-color: rgb(185, 185, 185);" class="row pt-4 pb-4 mt-2 ">
+                <div class="col-4" >
+                <h4>Product</h4>
+                </div>
+                <div class="col-4 ">
+                <h4>Quantity</h4>
+                </div>
+                <div class="col-4">
+                <h4>Price</h4>
+                </div>
+            </div>
+            {% for product in customerCart%}
+                <div  style="background-color: rgb(223, 223, 223);" class="row pt-2 pb-2 mt-2">
+                    <div class="col-4">
+                        <h5>{{product.name}}</h5>
+                    </div>
+                    <div class="col-4" style="padding:0 auto;">
+                        <div class="d-flex justify-content-around">
+                            <button onclick="handleCart(event)"  data-product-id="{{product.name}}" data-cart-action="delete" style="font-size:24px; border:none;width:30px;">-</button>
+                            <p class="pt-1"id="{{product.name}}">{{product.quantity}}</p>
+                            <button onclick="handleCart(event)"  data-product-id="{{product.name}}" data-cart-action="add" style="font-size:24px; border:none;width:30px;">+</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <h5 id="price-{{product.name}}">&#8377;{{product.price}}</h5>
+                    </div>
+                </div>
+            {% endfor %}
+            <div  style="background-color: rgb(223, 223, 223);" class="row p-2 mt-2">
+                <div class="col-md-4">
+                   <button onclick="placeOrder()"class="btn btn-dark" class="width:100%;">Place Order</button>
+                </div>
+                <div class="col-md-4">
+                    <h3></h3>
+                </div>
+                <div class="col-md-4">
+                    <h3 id="totalAmount">&#8377;{{total}}</h3>
+                </div>
+            </div>
+        </div>
+       <script>
+        function placeOrder(event){
+        console.log("placeorder")
+        
+          const xhr=new XMLHttpRequest();
+          let url='../placeorder';
+          xhr.open("GET", url, true); 
+          xhr.setRequestHeader("Content-Type", "application/json"); 
+          xhr.onreadystatechange = function () { 
+            if (xhr.readyState === 4 && xhr.status === 200) { 
+                let alertB=document.getElementById("alertBox");
+                if(JSON.parse(this.responseText)['order']=="placed"){
+                    alertB.classList.remove('d-none');
+                    
+                    alertB.innerText="Order Placed"
+                    window.location = "http://127.0.0.1:8000/";
+                }
+                else if(JSON.parse(this.responseText)['order']=="emptycart"){
+                    alertB.classList.remove('d-none');
+                    alertB.innerText="Your Cart is empty!"
+                    window.location = "http://127.0.0.1:8000/";
+                }
+                else{   
+                    alertB.classList.remove('d-none');
+                    alertB.innerText="Please Update your profile"
+                    window.location=("http://127.0.0.1:8000/profile")
+                }
+              } 
+          }; 
+          xhr.send();  
+      }
+    
+       </script>
+      {% endblock %}
