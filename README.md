@@ -7,3 +7,4 @@
 5. Enter command "python manage.py runserver" to start local server.
 
 ## Sample video of project
+[View video](https://drive.google.com/file/d/18oY2s85VbPdj0GC0w0dyOqlaAwH0QOj_/view?usp=sharing)
