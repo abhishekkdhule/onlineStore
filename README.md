@@ -1,5 +1,5 @@
 # onlineStore
-## A web application to buy milk products.
+## A web application to buy dairy products.
 [Checkout the application](https://onlinemilk9137.herokuapp.com/)
 Use the following credentials 
 * userid: Abhi9137
