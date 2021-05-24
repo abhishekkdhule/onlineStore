@@ -3,7 +3,7 @@
 [Checkout the application](https://onlinemilk9137.herokuapp.com/)
 Use the following credentials 
 * userid: Abhi9137
-* password: random123'
+* password: random123
 
 ## Installation on local machine
 1. Download the zip file(button at upper right)
