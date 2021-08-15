@@ -14,3 +14,13 @@ Use the following credentials
 
 ## Sample video of project
 [View video](https://drive.google.com/file/d/18oY2s85VbPdj0GC0w0dyOqlaAwH0QOj_/view?usp=sharing)
+
+## Sample screenshots
+Homepage
+![homepage](https://github.com/abhishekkdhule/onlineStore/blob/master/doodhwala_homepage.png)
+
+Profile
+![Profile](https://github.com/abhishekkdhule/onlineStore/blob/master/profile.png)
+
+Cart
+![Cart](https://github.com/abhishekkdhule/onlineStore/blob/master/cart.png)
